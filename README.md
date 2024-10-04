@@ -16,12 +16,12 @@
 ### 1.3 팀 구성
 <table>
       <tr>
-             <th>2004924 김아경(back)</th>
-             <th>2004912 김희주(front)</th>
              <th>1811242 이도윤(back)</th>
-             <th>2219068 이수현(front)</th>
-             <th>김정현(back)</th>
+             <th>2004924 김아경(back)</th>
              <th>2024005 정현수(back)</th>
+             <th>김정현(back)</th>
+             <th>2004912 김희주(front)</th>
+             <th>2219068 이수현(front)</th>
       </tr>
 </table>
 
