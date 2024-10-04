@@ -21,7 +21,7 @@
              <th>1811242 이도윤(back)</th>
              <th>2219068 이수현(front)</th>
              <th>김정현(back)</th>
-             <th>정현수(back)</th>
+             <th>2024005 정현수(back)</th>
       </tr>
 </table>
 
