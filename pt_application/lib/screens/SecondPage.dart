@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '/screens/Home.dart';
 
 class SecondPage extends StatelessWidget {
   @override
@@ -11,7 +12,10 @@ class SecondPage extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             // 버튼 클릭 시 첫 번째 페이지로 돌아가기
-            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Home())
+            );
           },
           child: Text('Back to Home Page'),
         ),

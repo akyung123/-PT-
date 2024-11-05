@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/screens/SecondPage.dart'; // SecondPage 파일을 import
+import '/screens/Login.dart';
 import '/screens/Calendar.dart';
 
 class Home extends StatelessWidget {
@@ -18,10 +18,10 @@ class Home extends StatelessWidget {
                 // 버튼 클릭 시 두 번째 페이지로 이동
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SecondPage()),
+                  MaterialPageRoute(builder: (context) => LoginPage()),
                 );
               },
-              child: Text('Go to Second Page'),
+              child: Text('Go to Login'),
             ),
             SizedBox(height: 20), // 버튼 사이에 간격 추가
             ElevatedButton(
