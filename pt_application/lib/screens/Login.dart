@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pt_application/screens/SecondPage.dart';
+import 'package:pt_application/screens/Home.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -17,9 +17,9 @@ class _LoginPageState extends State<LoginPage> {
     // 로그인 로직 추가 (예: 인증 API 호출)
     if (email.isNotEmpty && password.isNotEmpty) {
       // 페이지 이동
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => SecondPage()),
+        MaterialPageRoute(builder: (context) => Home()),
       );
     } else {
       // 필드가 비어있을 경우 경고 메시지
@@ -34,7 +34,9 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Login Page'),
+        backgroundColor: Colors.blue,
       ),
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -59,6 +61,10 @@ class _LoginPageState extends State<LoginPage> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.lightBlueAccent, // 버튼 배경색
+                foregroundColor: Colors.black, // 텍스트 및 아이콘 색상
+              ),
               onPressed: _login,
               child: Text('Login'),
             ),
