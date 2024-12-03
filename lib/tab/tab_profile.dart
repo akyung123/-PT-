@@ -88,7 +88,7 @@ class ProfilePage extends StatelessWidget {
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
                 const SizedBox(width: 8),
-                Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                Icon(Icons.arrow_forward_ios, size: 16, color: const Color.fromARGB(255, 8, 8, 8)),
               ],
             ),
           ],

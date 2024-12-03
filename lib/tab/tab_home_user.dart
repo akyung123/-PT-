@@ -214,7 +214,7 @@ class _HomeState extends State<Home> {
   final List<Widget> _pages = [
     HomePage(),    // 기존 StatelessWidget Home 페이지
     Calendar(),    // calendar.dart
-    ChatScreen(), // chat_page.
+    ChatScreen(), // chat_page.dart
     ProfilePage(), // 내 정보 화면
   ];
 
@@ -227,7 +227,7 @@ class _HomeState extends State<Home> {
       // ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 51, 51, 51),
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         items: [
