@@ -2,7 +2,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '/tab/tab_login.dart';
+import 'package:health_mate/screen/screen_login.dart';
 import 'package:health_mate/screen/screen_index_user.dart';
 import 'package:health_mate/screen/screen_login.dart';
 import 'package:health_mate/screen/screen_register.dart';
