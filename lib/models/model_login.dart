@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_mate/services/firestore_service.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override

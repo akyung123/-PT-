@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '/tab/tab_canlender.dart';
-import '/tab/tab_home_user.dart';
+import 'home/screen_home_user.dart';
 import '/tab/tab_chat.dart';
-import '/tab/tab_login.dart';
 import '/tab/tab_profile.dart';
 
 class IndexScreen extends StatefulWidget {
@@ -14,7 +13,7 @@ class IndexScreen extends StatefulWidget {
 class _IndexScreenState extends State<IndexScreen> {
   int _currentIndex = 0;
   final List<Widget> _tabs = [
-    HomePage(),    // 기존 StatelessWidget Home 페이지
+    HomeScreenUser(),    // 기존 StatelessWidget Home 페이지
     Calendar(),    // calendar.dart
     ChatScreen(), // chat_page.dart  HomeTab(),
 
@@ -53,7 +52,7 @@ class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:  HomePage(), // tab_home_user.dart의 메인 화면을 호출
+      body:  HomeScreenUser(), // tab_home_user.dart의 메인 화면을 호출
     );
   }
 }

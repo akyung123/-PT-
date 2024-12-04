@@ -3,7 +3,7 @@ import 'package:health_mate/tab/tab_profile.dart';
 import '/tab/tab_canlender.dart';
 import '/tab/tab_chat.dart';
 
-class HomePage extends StatelessWidget {
+class HomeScreenUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -212,7 +212,7 @@ class _HomeState extends State<Home> {
   }
 
   final List<Widget> _pages = [
-    HomePage(),    // 기존 StatelessWidget Home 페이지
+    HomeScreenUser(),    // 기존 StatelessWidget Home 페이지
     Calendar(),    // calendar.dart
     ChatScreen(), // chat_page.dart
     ProfilePage(), // 내 정보 화면
