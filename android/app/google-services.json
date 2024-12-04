@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:200255825364:android:58eb92828bfe8f950a6241",
+        "android_client_info": {
+          "package_name": "com.example.h"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA--1LYfiHKFhNtTMdMWqd95sDxuy2XhY8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:200255825364:android:ec206d019a9816050a6241",
         "android_client_info": {
           "package_name": "com.example.health_mate"

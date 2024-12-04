@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:health_mate/models/model_auth.dart';
 import 'package:health_mate/models/model_register.dart';
 import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterScreen extends StatelessWidget {
   @override
@@ -11,7 +12,7 @@ class RegisterScreen extends StatelessWidget {
       create: (_) => RegisterFieldModel(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text("회원가입 화면"),
+          title: Text('회원가입 화면')
         ),
         body: Column(
           children: [
