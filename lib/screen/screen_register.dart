@@ -1,150 +1,134 @@
+// screen_register.dart
 import 'package:flutter/material.dart';
+import 'package:health_mate/models/model_auth.dart';
+import 'package:health_mate/models/model_register.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(SignUpApp());
-}
-
-class SignUpApp extends StatelessWidget {
+class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: SignUpPage(),
+    return ChangeNotifierProvider(
+      create: (_) => RegisterFieldModel(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("회원가입 화면"),
+        ),
+        body: Column(
+          children: [
+            EmailInput(),
+            PasswordInput(),
+            PasswordConfirmInput(),
+            RegisterButton(),
+          ],
+        ),
+      ),
     );
   }
 }
 
-class SignUpPage extends StatefulWidget {
-  @override
-  _SignUpPageState createState() => _SignUpPageState();
-}
-
-class _SignUpPageState extends State<SignUpPage> {
-  final _formKey = GlobalKey<FormState>();
-  String gender = '남자';
-  String selectedWorkout = '선택';
-
+class EmailInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('회원가입'),
-        centerTitle: true,
+    final registerField = 
+        Provider.of<RegisterFieldModel>(context, listen: false);
+    return Container(
+      padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+      child: TextField(
+        onChanged: (email) {
+          registerField.setEmail(email);
+        },
+        keyboardType: TextInputType.emailAddress,
+        decoration: InputDecoration(
+          labelText: '이메일',
+          helperText: '',
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'ID',
-                  suffix: ElevatedButton(
-                    onPressed: () {
-                      // 중복 확인 로직
-                    },
-                    child: Text('중복확인'),
-                  ),
-                ),
-              ),
-              SizedBox(height: 16),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: '비밀번호',
-                  hintText: '영문자 포함 7~15자리',
-                ),
-                obscureText: true,
-              ),
-              SizedBox(height: 16),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: '비밀번호 확인',
-                ),
-                obscureText: true,
-              ),
-              SizedBox(height: 16),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: '이름',
-                ),
-              ),
-              SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: '연락처',
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  ElevatedButton(
-                    onPressed: () {
-                      // 본인확인 로직
-                    },
-                    child: Text('본인확인'),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              Row(
-                children: [
-                  Text('성별:'),
-                  Expanded(
-                    child: RadioListTile<String>(
-                      title: Text('남자'),
-                      value: '남자',
-                      groupValue: gender,
-                      onChanged: (value) {
-                        setState(() {
-                          gender = value!;
-                        });
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: RadioListTile<String>(
-                      title: Text('여자'),
-                      value: '여자',
-                      groupValue: gender,
-                      onChanged: (value) {
-                        setState(() {
-                          gender = value!;
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                value: selectedWorkout,
-                items: ['선택', '다이어트', '스트레칭', '근력증가', '필라테스']
-                    .map((workout) => DropdownMenuItem(
-                          value: workout,
-                          child: Text(workout),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedWorkout = value!;
-                  });
-                },
-                decoration: InputDecoration(labelText: '운동목적'),
-              ),
-              SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // 회원가입 처리 로직
-                  }
-                },
-                child: Text('확인'),
-              ),
-            ],
+    );
+  }
+}
+
+class PasswordInput extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final registerField = 
+        Provider.of<RegisterFieldModel>(context, listen: false);
+    return Container(
+      padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+      child: TextField(
+        onChanged: (password) {
+          registerField.setPassword(password);
+        },
+        obscureText: true,
+        decoration: InputDecoration(
+          labelText: '비밀번호',
+          helperText: '',
+        ),
+      ),
+    );
+  }
+}
+
+class PasswordConfirmInput extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final registerField = 
+        Provider.of<RegisterFieldModel>(context); //liseten == true
+    return Container(
+      padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+      child: TextField(
+        onChanged: (password) {
+          registerField.setPasswordConfirm(password);
+        },
+        obscureText: true,
+        decoration: InputDecoration(
+          labelText: '비밀번호 확인',
+          helperText: '',
+          errorText: registerField.password != registerField.passwordConfirm
+              ? '비밀번호가 일치하지 않습니다.'
+              : null,
+        ),
+      ),
+    );
+  }
+}
+
+class RegisterButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final authClient = 
+        Provider.of<RegisterFieldModel>(context, listen: false);
+    final registerField = 
+        Provider.of<RegisterFieldModel>(context, listen: false);
+    return Container(
+      width: MediaQuery.of(context).size.width *0.85,
+      height: MediaQuery.of(context).size.height *0.05,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
           ),
         ),
+        onPressed: () async {
+          await authClient
+              .registerWithEmail(registerField.email, registerField.password)
+              .then((registerStatus) {
+            if (registerStatus == AuthStatus.registerSuccess) {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(content: Text('회원가입이 완료되었습니다!')),
+                );
+              Navigator.pop(context);
+            } else {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(content: Text('회원가입을 실패했습니다. 다시 시도해주세요.')),
+                );
+            }
+          });
+        },
+        child: Text('회원가입'),
       ),
     );
   }
