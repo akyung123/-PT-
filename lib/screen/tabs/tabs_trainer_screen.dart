@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../trainer/home_trainer_screen.dart';
-import '../trainer/calendar_trainer_screen.dart';
-import '../trainer/chat_trainer_screen.dart';
-import '../trainer/profile_trainer_screen.dart';
+import 'package:health_mate/screen/trainer/calendar_trainer_screen.dart';
+import 'package:health_mate/screen/trainer/chat_trainer_screen.dart';
+import 'package:health_mate/screen/trainer/home_trainer_screen.dart';
+import 'package:health_mate/screen/trainer/profile_trainer_screen.dart';
 
 class TabsTrainerScreen extends StatefulWidget {
   @override
@@ -16,13 +16,13 @@ class _TabsTrainerScreenState extends State<TabsTrainerScreen> {
     HomeTrainerScreen(trainerId: '',),
     CalendarTrainerScreen(),
     ChatTrainerScreen(),
-    ProfileTrainerScreen(),
+    ProfileTrainerScreen()
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_selectedIndex], // 현재 탭에 해당하는 화면
+      body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) {
@@ -37,7 +37,7 @@ class _TabsTrainerScreenState extends State<TabsTrainerScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),
-            label: '달력',
+            label: '캘린더',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.chat),
@@ -45,7 +45,7 @@ class _TabsTrainerScreenState extends State<TabsTrainerScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: '내정보',
+            label: '내 정보',
           ),
         ],
       ),

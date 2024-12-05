@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class ProfileUserScreen extends StatelessWidget {
   final String memberId; // 사용자 ID를 받는 변수
+  final String? trainerId; // 트레이너 ID를 받는 변수 (nullable)
 
-  ProfileUserScreen({required this.memberId}); // 생성자에서 memberId를 필수로 받음
+  ProfileUserScreen({required this.memberId, this.trainerId}); // 생성자에서 두 값을 받음
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +46,25 @@ class ProfileUserScreen extends StatelessWidget {
                       style: TextStyle(fontSize: 16, color: Colors.grey),
                     ),
                   ],
+                ),
+              ],
+            ),
+          ),
+          const Divider(thickness: 1, color: Colors.grey),
+
+          // 트레이너 정보 표시
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '트레이너 ID',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  trainerId ?? '미등록', // 트레이너 ID가 없으면 '미등록' 표시
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ],
             ),

@@ -4,10 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:health_mate/screen/auth/forgot_password_screen.dart';
 import 'package:health_mate/screen/auth/screen_login.dart';
+import 'package:health_mate/screen/tabs/tabs_trainer_screen.dart';
 import 'package:health_mate/screen/tabs/tabs_user_screen.dart';
 import 'package:health_mate/screen/user/home_user_screen.dart';
 import 'package:health_mate/screen/auth/screen_register.dart';
 import 'package:health_mate/models/model_auth.dart';
+import 'package:health_mate/screen/user/seletTrainer_screen.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
@@ -51,6 +53,8 @@ class MyApp extends StatelessWidget {
           '/register': (context) => RegisterScreen(),
           '/forgot_password': (context) => ForgotPasswordScreen(),
           '/tab_user': (context) => TabsUserScreen(), // TabsUserScreen 연결
+          '/tab_trainer': (context) => TabsTrainerScreen(),
+          '/selet_trainer': (context) => SelectTrainerScreen(userId: '',),
         },
         initialRoute: '/',
       ),

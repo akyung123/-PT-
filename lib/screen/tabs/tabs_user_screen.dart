@@ -14,7 +14,7 @@ class _TabsUserScreenState extends State<TabsUserScreen> {
 
   final List<Widget> _screens = [
     HomeUserScreen(), // 홈 화면
-    CalendarUserScreen(memberId: 'user123'), // 달력 화면
+    CalendarUserScreen(), // 달력 화면
     ChatUserScreen(memberId: 'user123'), // 채팅 화면
     ProfileUserScreen(memberId: 'user123'), // 내 정보 화면
   ];
