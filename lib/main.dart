@@ -54,7 +54,10 @@ class MyApp extends StatelessWidget {
           '/forgot_password': (context) => ForgotPasswordScreen(),
           '/tab_user': (context) => TabsUserScreen(), // TabsUserScreen 연결
           '/tab_trainer': (context) => TabsTrainerScreen(),
-          '/selet_trainer': (context) => SelectTrainerScreen(userId: '',),
+          '/select_trainer': (context) {
+            final userId = ModalRoute.of(context)!.settings.arguments as String;
+            return SelectTrainerScreen(userId: userId);
+          },
         },
         initialRoute: '/',
       ),
