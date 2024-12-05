@@ -21,7 +21,9 @@ class _TabsUserScreenState extends State<TabsUserScreen> {
   }
 
   final List<Widget> _screens = [
-    HomeUserScreen(), // 홈 화면
+    HomeUserScreen(
+      initialDate: DateTime.now(),
+    ), // 홈 화면
     CalendarUserScreen(
       initialDate: DateTime.now(),
     ), // 달력 화면
