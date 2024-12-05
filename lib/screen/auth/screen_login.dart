@@ -56,14 +56,14 @@ class _LoginScreenState extends State<LoginScreen> {
       if (userType == 'personal') {
         if (trainerId == null || trainerId.isEmpty) {
           // 트레이너 선택 화면으로 이동
-          Navigator.pushReplacementNamed(context, '/select_trainer');
+          Navigator.pushReplacementNamed(context, '/select_trainer', arguments: userId, );
         } else {
           // 일반 회원 홈 화면으로 이동
           Navigator.pushReplacementNamed(context, '/tab_user');
         }
       } else if (userType == 'trainer') {
         // 트레이너 홈 화면으로 이동
-        Navigator.pushReplacementNamed(context, '/home_trainer');
+        Navigator.pushReplacementNamed(context, '/tab_trainer');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('알 수 없는 사용자 유형입니다.')),

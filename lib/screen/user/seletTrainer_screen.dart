@@ -56,7 +56,8 @@ class SelectTrainerScreen extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('${trainer['name']} 트레이너가 선택되었습니다.')),
                   );
-                  Navigator.pop(context); // 선택 완료 후 이전 화면으로 이동
+                  // 트레이너 선택 후 홈 화면으로 이동
+                  Navigator.pushReplacementNamed(context, '/tab_user'); 
                 },
               );
             },
