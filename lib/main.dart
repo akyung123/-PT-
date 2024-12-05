@@ -4,8 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:health_mate/screen/auth/forgot_password_screen.dart';
 import 'package:health_mate/screen/auth/screen_login.dart';
-import 'package:health_mate/screen/home/screen_home_user.dart';
-import 'package:health_mate/screen/screen_index_user.dart';
+import 'package:health_mate/screen/tabs/tabs_user_screen.dart';
+import 'package:health_mate/screen/user/home_user_screen.dart';
 import 'package:health_mate/screen/auth/screen_register.dart';
 import 'package:health_mate/models/model_auth.dart';
 import 'package:provider/provider.dart';
@@ -26,8 +26,7 @@ import 'firebase_options.dart';
 //   }k
 // }
 
-
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -45,38 +44,16 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'PT Demo',
         theme: ThemeData(
-        primarySwatch: Colors.blue,
+          primarySwatch: Colors.blue,
         ),
         routes: {
           '/': (context) => LoginScreen(),
-          '/register': (context) => RegisterScreen(),         
-          '/index': (context) => IndexScreen(),
-          '/forgot_password': (context) => ForgotPasswordScreen(), // 비밀번호 찾기 화면
-          '/home_user': (context) => HomeScreenUser(), // 개인회원 홈 화면     
+          '/register': (context) => RegisterScreen(),
+          '/forgot_password': (context) => ForgotPasswordScreen(),
+          '/tab_user': (context) => TabsUserScreen(), // TabsUserScreen 연결
         },
         initialRoute: '/',
       ),
     );
   }
-}
-
-Future<String> fetchData() async {
-  await Future.delayed(Duration(seconds: 3)); // 예제
-  return "Data Loaded";
-}
-
-@override
-Widget build(BuildContext context) {
-  return FutureBuilder<String>(
-    future: fetchData(),
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return CircularProgressIndicator();
-      } else if (snapshot.hasError) {
-        return Text("Error: ${snapshot.error}");
-      } else {
-        return Text("Data: ${snapshot.data}");
-      }
-    },
-  );
 }

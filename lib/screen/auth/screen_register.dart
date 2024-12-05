@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:health_mate/screen/user/seletTrainer_screen.dart'; // 트레이너 선택 화면 import
+import 'package:health_mate/screen/trainer/home_trainer_screen.dart'; // 트레이너 화면 import
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -10,8 +12,8 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  String userType = 'personal';
-  bool isLoading = false; // 로딩 상태 변수 추가
+  String userType = 'personal'; // 기본 값은 일반 회원
+  bool isLoading = false;
 
   // Firestore에 사용자 정보 저장
   Future<void> saveUserToFirestore(String userId, String email, String userType) async {
@@ -19,6 +21,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       await FirebaseFirestore.instance.collection('users').doc(userId).set({
         'email': email,
         'userType': userType,
+        'trainerId': userType == 'personal' ? null : userId, // 일반 회원은 trainerId가 null, 트레이너는 자기 ID 저장
         'createdAt': FieldValue.serverTimestamp(),
       });
       print('Firestore 저장 성공');
@@ -30,31 +33,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
   // Firebase Authentication 회원가입
   Future<void> registerUser() async {
     setState(() {
-      isLoading = true; // 로딩 시작
+      isLoading = true;
     });
 
     try {
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
       );
 
       String userId = userCredential.user!.uid;
-      await saveUserToFirestore(userId, emailController.text, userType);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('회원가입 성공!')),
-      );
+      // Firestore에 사용자 데이터 저장
+      await saveUserToFirestore(userId, emailController.text.trim(), userType);
 
-      // 화면 이동 로직 추가 가능
-      Navigator.pop(context); // 이전 화면으로 이동 (예시)
+      // 회원가입 성공: 일반 회원은 트레이너 선택 화면, 트레이너는 트레이너 화면으로 이동
+      if (userType == 'personal') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SelectTrainerScreen(userId: userId),
+          ),
+        );
+      } else if (userType == 'trainer') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomeTrainerScreen(trainerId: userId),
+          ),
+        );
+      }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('회원가입 오류: ${e.toString()}')),
       );
     } finally {
       setState(() {
-        isLoading = false; // 로딩 종료
+        isLoading = false;
       });
     }
   }
@@ -63,77 +78,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('회원가입')),
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextField(
-                  controller: emailController,
-                  decoration: InputDecoration(labelText: '이메일'),
-                ),
-                SizedBox(height: 16),
-                TextField(
-                  controller: passwordController,
-                  decoration: InputDecoration(labelText: '비밀번호'),
-                  obscureText: true,
-                ),
-                SizedBox(height: 16),
-                DropdownButton<String>(
-                  value: userType,
-                  items: [
-                    DropdownMenuItem(value: 'personal', child: Text('개인회원')),
-                    DropdownMenuItem(value: 'trainer', child: Text('트레이너')),
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      userType = value!;
-                    });
-                  },
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: isLoading
-                      ? null
-                      : registerUser, // 로딩 중 버튼 비활성화
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: isLoading ? Colors.grey : Colors.blue,
-                    foregroundColor: Colors.white,
-                    minimumSize: Size(double.infinity, 48),
-                  ),
-                  child: isLoading
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 2,
-                              ),
-                            ),
-                            SizedBox(width: 10),
-                            Text('처리 중...'),
-                          ],
-                        )
-                      : Text('회원가입'),
-                ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: emailController,
+              decoration: InputDecoration(labelText: '이메일'),
+            ),
+            SizedBox(height: 16),
+            TextField(
+              controller: passwordController,
+              obscureText: true,
+              decoration: InputDecoration(labelText: '비밀번호'),
+            ),
+            SizedBox(height: 16),
+            // 회원 유형 선택 Dropdown
+            DropdownButton<String>(
+              value: userType,
+              items: [
+                DropdownMenuItem(value: 'personal', child: Text('일반 회원')),
+                DropdownMenuItem(value: 'trainer', child: Text('트레이너')),
               ],
+              onChanged: (value) {
+                setState(() {
+                  userType = value!;
+                });
+              },
             ),
-          ),
-          if (isLoading) // 로딩 상태일 때 스피너 오버레이
-            Container(
-              color: Colors.black.withOpacity(0.3), // 반투명 배경
-              child: Center(
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                ),
-              ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: isLoading ? null : registerUser,
+              child: isLoading
+                  ? CircularProgressIndicator(color: Colors.white)
+                  : Text('회원가입'),
             ),
-        ],
+          ],
+        ),
       ),
     );
   }

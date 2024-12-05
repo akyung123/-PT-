@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:health_mate/Widget/loading_indicator.dart'; // 공통 로딩 위젯 추가
+import 'package:health_mate/widget/loading_indicator.dart'; // 공통 로딩 위젯 추가
+import 'package:health_mate/services/auth_service.dart'; // AuthService 가져오기
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -11,8 +12,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final AuthService _authService = AuthService(); // AuthService 인스턴스
 
   bool isLoading = false; // 로딩 상태 변수
 
@@ -32,38 +32,23 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      // Firebase 로그인 로직
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      // AuthService를 통해 로그인 및 사용자 유형 확인
+      String? userType = await _authService.loginUser(email, password);
 
-      String userId = userCredential.user!.uid;
-
-      // Firestore에서 사용자 유형 확인
-      DocumentSnapshot userDoc =
-          await _firestore.collection('users').doc(userId).get();
-
-      if (userDoc.exists) {
-        String userType = userDoc['userType'];
-
-        if (userType == 'personal') {
-          // 개인회원 홈 화면으로 이동
-          Navigator.pushReplacementNamed(context, '/home_user');
-        } else {
-          // 다른 회원 유형 처리 (예시: 트레이너)
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('트레이너 화면으로 이동 준비 중'),
-          ));
-        }
+      if (userType == 'personal') {
+        // 개인회원 tab 화면으로 이동
+        Navigator.pushReplacementNamed(context, '/tab_user');
+      } else if (userType == 'trainer') {
+        // 트레이너 홈 화면으로 이동
+        Navigator.pushReplacementNamed(context, '/home_trainer');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('사용자 정보를 찾을 수 없습니다.'),
+          content: Text('알 수 없는 사용자 유형입니다.'),
         ));
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('로그인 실패: ${e.toString()}'),
+        content: Text(e.toString()),
       ));
     } finally {
       setState(() {
@@ -116,7 +101,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     foregroundColor: Colors.white,
                     minimumSize: Size(double.infinity, 48),
                   ),
-                  child: Text('로그인'),
+                  child: isLoading
+                      ? CircularProgressIndicator(color: Colors.white)
+                      : Text('로그인'),
                 ),
                 SizedBox(height: 20),
                 // 회원가입, 비밀번호 찾기 버튼

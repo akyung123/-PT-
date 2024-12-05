@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:health_mate/tab/tab_profile.dart';
-import '/tab/tab_canlender.dart';
-import '/tab/tab_chat.dart';
+import 'package:health_mate/screen/user/profile_user_screen.dart';
+import 'calendar_user_screen.dart';
+import 'chat_user_screen.dart';
 
-class HomeScreenUser extends StatelessWidget {
+class HomeUserScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -196,56 +196,3 @@ class HomeScreenUser extends StatelessWidget {
   }
 }
 
-// 하단 네비게이션 바를 포함한 Home 클래스
-class Home extends StatefulWidget {
-  @override
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  final List<Widget> _pages = [
-    HomeScreenUser(),    // 기존 StatelessWidget Home 페이지
-    Calendar(),    // calendar.dart
-    ChatScreen(), // chat_page.dart
-    ProfilePage(), // 내 정보 화면
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('PT Demo'),
-      //   backgroundColor: Colors.green,
-      // ),
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color.fromARGB(255, 51, 51, 51),
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Calendar',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Chat',
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Myprofile'),
-        ],
-      ),
-    );
-  }
-} 

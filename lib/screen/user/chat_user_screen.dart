@@ -1,23 +1,29 @@
 import 'package:flutter/material.dart';
 
-class ChatScreen extends StatefulWidget {
+class ChatUserScreen extends StatefulWidget {
+  final String memberId; // 사용자 ID를 전달받음
+
+  ChatUserScreen({required this.memberId}); // 생성자에서 memberId를 필수로 받음
+
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  _ChatUserScreenState createState() => _ChatUserScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatUserScreenState extends State<ChatUserScreen> {
   final TextEditingController _messageController = TextEditingController();
   final List<ChatMessage> _messages = [];
 
   void _sendMessage() {
     if (_messageController.text.isNotEmpty) {
       setState(() {
+        // 사용자가 보낸 메시지 추가
         _messages.add(ChatMessage(
-          text: _messageController.text, 
+          text: _messageController.text,
           isMe: true,
         ));
+        // 자동 응답 메시지 추가
         _messages.add(ChatMessage(
-          text: '자동 응답: 메시지 받았습니다', 
+          text: '자동 응답: ${widget.memberId}님 메시지 받았습니다', // memberId 포함
           isMe: false,
         ));
         _messageController.clear();
@@ -29,7 +35,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('채팅'),
+        title: Text('채팅 (${widget.memberId})'), // memberId 표시
         backgroundColor: Colors.blue,
       ),
       backgroundColor: Colors.white,

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfileUserScreen extends StatelessWidget {
+  final String memberId; // 사용자 ID를 받는 변수
+
+  ProfileUserScreen({required this.memberId}); // 생성자에서 memberId를 필수로 받음
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('내 정보'),
+        title: Text('내 정보 ($memberId)'), // memberId를 제목에 표시
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
@@ -32,12 +36,12 @@ class ProfilePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '홍길동',
+                      '홍길동', // 사용자 이름 (임시 값, Firestore 연동 필요)
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '여자',
+                      '여자', // 사용자 성별 (임시 값, Firestore 연동 필요)
                       style: TextStyle(fontSize: 16, color: Colors.grey),
                     ),
                   ],
@@ -69,7 +73,7 @@ class ProfilePage extends StatelessWidget {
       onTap: () {
         // 정보 수정 페이지로 이동 (필요시 구현)
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('$label 수정하기')),
+          SnackBar(content: Text('$label 수정하기 (ID: $memberId)')), // memberId 표시
         );
       },
       child: Padding(
