@@ -5,13 +5,14 @@ import 'member_task_screen.dart'; // 회원 당일 할 일 화면
 class HomeTrainerScreen extends StatelessWidget {
   final String trainerId; // 트레이너 ID
 
-  HomeTrainerScreen({required this.trainerId});
+  const HomeTrainerScreen({Key? key, required this.trainerId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('회원 목록'),
+        title: const Text('회원 목록'),
         backgroundColor: Colors.black,
       ),
       body: StreamBuilder<QuerySnapshot>(
@@ -21,11 +22,11 @@ class HomeTrainerScreen extends StatelessWidget {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('회원이 없습니다.'));
+            return const Center(child: Text('회원이 없습니다.'));
           }
 
           final members = snapshot.data!.docs;
@@ -37,13 +38,14 @@ class HomeTrainerScreen extends StatelessWidget {
               return ListTile(
                 title: Text(member['name']), // 회원 이름
                 subtitle: Text('ID: ${member.id}'),
-                trailing: Icon(Icons.arrow_forward),
+                trailing: const Icon(Icons.arrow_forward),
                 onTap: () {
                   // 회원 당일 할 일 화면으로 이동
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MemberTaskScreen(memberId: member.id),
+                      builder: (context) =>
+                          MemberTaskScreen(memberId: member.id),
                     ),
                   );
                 },

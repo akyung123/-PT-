@@ -5,6 +5,8 @@ import 'package:health_mate/screen/trainer/home_trainer_screen.dart';
 import 'package:health_mate/screen/trainer/profile_trainer_screen.dart';
 
 class TabsTrainerScreen extends StatefulWidget {
+  const TabsTrainerScreen({Key? key}) : super(key: key);
+
   @override
   _TabsTrainerScreenState createState() => _TabsTrainerScreenState();
 }
@@ -12,8 +14,16 @@ class TabsTrainerScreen extends StatefulWidget {
 class _TabsTrainerScreenState extends State<TabsTrainerScreen> {
   int _selectedIndex = 0;
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   final List<Widget> _screens = [
-    HomeTrainerScreen(trainerId: '',),
+    HomeTrainerScreen(
+      trainerId: '',
+    ),
     CalendarTrainerScreen(),
     ChatTrainerScreen(),
     ProfileTrainerScreen()
@@ -24,13 +34,18 @@ class _TabsTrainerScreenState extends State<TabsTrainerScreen> {
     return Scaffold(
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
+        // currentIndex: _selectedIndex,
+        // onTap: (index) {
+        //   setState(() {
+        //     _selectedIndex = index;
+        //   });
+        // },
+        backgroundColor: Colors.white,
         currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        items: [
+        onTap: _onItemTapped,
+        selectedItemColor: Colors.purple, // 선택된 항목의 색상
+        unselectedItemColor: Colors.grey, // 선택되지 않은 항목의 색상
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: '홈',

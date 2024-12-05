@@ -12,7 +12,7 @@ class TaskService {
           .get();
 
       return snapshot.docs.map((doc) {
-        final data = doc.data() as Map<String, dynamic>;
+        final data = doc.data();
         data['id'] = doc.id; // Firestore 문서 ID 추가
         return data;
       }).toList();
@@ -22,7 +22,8 @@ class TaskService {
   }
 
   // 특정 날짜의 할 일 목록 가져오기
-  Future<List<Map<String, dynamic>>> getTasksForDate(String memberId, DateTime date) async {
+  Future<List<Map<String, dynamic>>> getTasksForDate(
+      String memberId, DateTime date) async {
     try {
       final snapshot = await _firestore
           .collection('tasks')
@@ -31,7 +32,7 @@ class TaskService {
           .get();
 
       return snapshot.docs.map((doc) {
-        final data = doc.data() as Map<String, dynamic>;
+        final data = doc.data();
         data['id'] = doc.id; // Firestore 문서 ID 추가
         return data;
       }).toList();
@@ -68,7 +69,10 @@ class TaskService {
     required bool completed,
   }) async {
     try {
-      await _firestore.collection('tasks').doc(taskId).update({'completed': completed});
+      await _firestore
+          .collection('tasks')
+          .doc(taskId)
+          .update({'completed': completed});
     } catch (e) {
       throw Exception('할 일 완료 상태 업데이트 실패: ${e.toString()}');
     }

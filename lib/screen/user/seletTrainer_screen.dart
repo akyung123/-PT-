@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class SelectTrainerScreen extends StatelessWidget {
   final String userId; // 현재 회원 ID
 
-  SelectTrainerScreen({required this.userId});
+  const SelectTrainerScreen({Key? key, required this.userId}) : super(key: key);
 
   Future<List<Map<String, dynamic>>> fetchTrainers() async {
     final snapshot = await FirebaseFirestore.instance
@@ -31,16 +31,16 @@ class SelectTrainerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('트레이너 선택')),
+      appBar: AppBar(title: const Text('트레이너 선택')),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: fetchTrainers(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('등록된 트레이너가 없습니다.'));
+            return const Center(child: Text('등록된 트레이너가 없습니다.'));
           }
 
           final trainers = snapshot.data!;
@@ -54,10 +54,11 @@ class SelectTrainerScreen extends StatelessWidget {
                 onTap: () async {
                   await assignTrainer(trainer['id']);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('${trainer['name']} 트레이너가 선택되었습니다.')),
+                    SnackBar(
+                        content: Text('${trainer['name']} 트레이너가 선택되었습니다.')),
                   );
                   // 트레이너 선택 후 홈 화면으로 이동
-                  Navigator.pushReplacementNamed(context, '/tab_user'); 
+                  Navigator.pushReplacementNamed(context, '/tab_user');
                 },
               );
             },
