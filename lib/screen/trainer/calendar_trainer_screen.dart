@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarTrainer extends StatelessWidget {
+  const CalendarTrainer({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,6 +17,8 @@ class CalendarTrainer extends StatelessWidget {
 }
 
 class CalendarTrainerScreen extends StatefulWidget {
+  const CalendarTrainerScreen({Key? key}) : super(key: key);
+
   @override
   _CalendarTrainerScreenState createState() => _CalendarTrainerScreenState();
 }
@@ -41,7 +45,7 @@ class _CalendarTrainerScreenState extends State<CalendarTrainerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Calendar'),
+        title: const Text('Calendar'),
         backgroundColor: Colors.blue,
       ),
       backgroundColor: Colors.white,
@@ -49,7 +53,7 @@ class _CalendarTrainerScreenState extends State<CalendarTrainerScreen> {
         children: [
           TableCalendar(
             calendarFormat: CalendarFormat.month,
-            availableCalendarFormats: {
+            availableCalendarFormats: const {
               CalendarFormat.month: '1 Month', // 월 모드만 표시
             },
             firstDay: DateTime.utc(2020, 1, 1),
@@ -57,7 +61,7 @@ class _CalendarTrainerScreenState extends State<CalendarTrainerScreen> {
             focusedDay: _focusedDay,
             selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
             onDaySelected: _onDaySelected,
-            calendarStyle: CalendarStyle(
+            calendarStyle: const CalendarStyle(
               selectedDecoration: BoxDecoration(
                 color: Colors.orange,
                 shape: BoxShape.circle,

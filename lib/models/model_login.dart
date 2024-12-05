@@ -1,3 +1,65 @@
+// import 'package:flutter/material.dart';
+// import 'package:health_mate/services/firestore_service.dart';
+
+// class SignUpScreen extends StatefulWidget {
+//   const SignUpScreen({Key? key}) : super(key: key);
+
+//   @override
+//   _SignUpScreenState createState() => _SignUpScreenState();
+// }
+
+// class _SignUpScreenState extends State<SignUpScreen> {
+//   final TextEditingController emailController = TextEditingController();
+//   final TextEditingController passwordController = TextEditingController();
+//   String userType = 'personal'; // Default 회원 유형
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: const Text('회원가입')),
+//       body: Padding(
+//         padding: const EdgeInsets.all(16.0),
+//         child: Column(
+//           children: [
+//             TextField(
+//               controller: emailController,
+//               decoration: const InputDecoration(labelText: '이메일'),
+//             ),
+//             TextField(
+//               controller: passwordController,
+//               decoration: const InputDecoration(labelText: '비밀번호'),
+//               obscureText: true,
+//             ),
+//             DropdownButton<String>(
+//               value: userType,
+//               items: const [
+//                 DropdownMenuItem(value: 'personal', child: Text('개인회원')),
+//                 DropdownMenuItem(value: 'trainer', child: Text('트레이너')),
+//               ],
+//               onChanged: (value) {
+//                 setState(() {
+//                   userType = value!;
+//                 });
+//               },
+//             ),
+//             ElevatedButton(
+//               onPressed: () async {
+//                 // 회원가입 처리 호출
+//                 await registerUser(
+//                   emailController.text,
+//                   passwordController.text,
+//                   userType,
+//                 );
+//               },
+//               child: const Text('회원가입'),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
 import 'package:flutter/material.dart';
 import 'package:health_mate/services/firestore_service.dart';
 

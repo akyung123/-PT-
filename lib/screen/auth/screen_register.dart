@@ -6,6 +6,8 @@ import 'package:health_mate/screen/trainer/home_trainer_screen.dart'; // 트레�
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
+
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
@@ -30,7 +32,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final name = nameController.text.trim();
     final phone = phoneController.text.trim();
 
-    if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty || name.isEmpty || phone.isEmpty) {
+    if (email.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty ||
+        name.isEmpty ||
+        phone.isEmpty) {
       setState(() {
         errorMessage = '모든 필드를 채워주세요.';
       });
@@ -68,14 +74,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('회원가입 성공!')),
+        const SnackBar(content: Text('회원가입 성공!')),
       );
 
       // 회원 유형에 따라 다른 화면으로 이동
       if (userType == 'trainer') {
         Navigator.pushReplacementNamed(context, '/trainer_Home');
       } else {
-        Navigator.pushReplacementNamed(context, '/select_trainer',
+        Navigator.pushReplacementNamed(
+          context, '/select_trainer',
           arguments: userCredential.user!.uid, // Firebase에서 가져온 사용자 ID
         );
       }
@@ -94,7 +101,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('회원가입'),
+        title: const Text('회원가입'),
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -104,7 +111,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                   color: Colors.black26,
                   blurRadius: 10,
@@ -120,76 +127,76 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Text(
                       errorMessage,
-                      style: TextStyle(color: Colors.red, fontSize: 14),
+                      style: const TextStyle(color: Colors.red, fontSize: 14),
                     ),
                   ),
                 TextField(
                   controller: idController,
                   decoration: InputDecoration(
                     labelText: 'ID',
-                    prefixIcon: Icon(Icons.email),
+                    prefixIcon: const Icon(Icons.email),
                     suffix: ElevatedButton(
                       onPressed: () {
                         // 중복 확인 로직
                       },
                       style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
                       ),
-                      child: Text('중복확인'),
+                      child: const Text('중복확인'),
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextField(
                   controller: passwordController,
                   obscureText: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: '비밀번호',
                     hintText: '영문자 포함 7~15자리',
                     prefixIcon: Icon(Icons.lock),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextField(
                   controller: confirmPasswordController,
                   obscureText: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: '비밀번호 확인',
                     prefixIcon: Icon(Icons.lock_outline),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextField(
                   controller: nameController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: '이름',
                     hintText: 'NAME',
                     prefixIcon: Icon(Icons.person),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextField(
                   controller: phoneController,
                   decoration: InputDecoration(
                     labelText: '연락처',
-                    prefixIcon: Icon(Icons.phone),
+                    prefixIcon: const Icon(Icons.phone),
                     suffix: ElevatedButton(
                       onPressed: () {
                         // 본인 확인 로직
                       },
                       style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
                       ),
-                      child: Text('본인확인'),
+                      child: const Text('본인확인'),
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   children: [
                     Expanded(
                       child: ListTile(
-                        title: Text('남자'),
+                        title: const Text('남자'),
                         leading: Radio<String>(
                           value: '남자',
                           groupValue: gender,
@@ -203,7 +210,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     Expanded(
                       child: ListTile(
-                        title: Text('여자'),
+                        title: const Text('여자'),
                         leading: Radio<String>(
                           value: '여자',
                           groupValue: gender,
@@ -217,10 +224,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
                   value: fitnessGoal,
-                  items: [
+                  items: const [
                     DropdownMenuItem(value: '선택', child: Text('선택')),
                     DropdownMenuItem(value: '다이어트', child: Text('다이어트')),
                     DropdownMenuItem(value: '스트레칭', child: Text('스트레칭')),
@@ -232,14 +239,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       fitnessGoal = value!;
                     });
                   },
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: '운동 목적',
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
                   value: userType,
-                  items: [
+                  items: const [
                     DropdownMenuItem(value: 'personal', child: Text('일반 회원')),
                     DropdownMenuItem(value: 'trainer', child: Text('트레이너')),
                   ],
@@ -248,22 +255,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       userType = value!;
                     });
                   },
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: '회원 유형',
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: registerUser,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
-                    minimumSize: Size(double.infinity, 50),
+                    minimumSize: const Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    textStyle: TextStyle(fontSize: 18),
+                    textStyle: const TextStyle(fontSize: 18),
                   ),
-                  child: Text('회원가입'),
+                  child: const Text('회원가입'),
                 ),
               ],
             ),

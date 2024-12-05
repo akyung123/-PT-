@@ -19,7 +19,7 @@ class FirebaseAuthProvider with ChangeNotifier {
   Future<AuthStatus> registerWithEmail(String email, String password) async {
     try {
       UserCredential credential = await authClient
-        .createUserWithEmailAndPassword(email: email, password: password);
+          .createUserWithEmailAndPassword(email: email, password: password);
       return AuthStatus.registerSuccess;
     } catch (e) {
       print(e);
@@ -38,7 +38,7 @@ class FirebaseAuthProvider with ChangeNotifier {
         prefs.setString('email', email);
         prefs.setString('password', password);
       });
-      print("[+] 로그인 유저 : " + user!.email.toString());
+      print("[+] 로그인 유저 : ${user!.email}");
       return AuthStatus.loginSuccess;
     } catch (e) {
       print(e);

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class ChatUserScreen extends StatefulWidget {
   final String memberId; // 사용자 ID를 전달받음
 
-  ChatUserScreen({required this.memberId}); // 생성자에서 memberId를 필수로 받음
+  const ChatUserScreen({Key? key, required this.memberId})
+      : super(key: key); // 생성자에서 memberId를 필수로 받음
 
   @override
   _ChatUserScreenState createState() => _ChatUserScreenState();
@@ -64,9 +65,9 @@ class _ChatUserScreenState extends State<ChatUserScreen> {
                     ),
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 IconButton(
-                  icon: Icon(Icons.send, color: Colors.blue),
+                  icon: const Icon(Icons.send, color: Colors.blue),
                   onPressed: _sendMessage,
                 ),
               ],
@@ -82,22 +83,23 @@ class ChatMessage extends StatelessWidget {
   final String text;
   final bool isMe;
 
-  ChatMessage({required this.text, required this.isMe});
+  const ChatMessage({Key? key, required this.text, required this.isMe})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-        padding: EdgeInsets.all(10),
+        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: isMe ? Colors.blue[100] : Colors.grey[300],
           borderRadius: BorderRadius.circular(10),
         ),
         child: Text(
           text,
-          style: TextStyle(fontSize: 16),
+          style: const TextStyle(fontSize: 16),
         ),
       ),
     );

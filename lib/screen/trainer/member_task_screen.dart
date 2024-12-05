@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class MemberTaskScreen extends StatefulWidget {
   final String memberId; // 회원 ID
 
-  MemberTaskScreen({required this.memberId});
+  const MemberTaskScreen({Key? key, required this.memberId}) : super(key: key);
 
   @override
   _MemberTaskScreenState createState() => _MemberTaskScreenState();
@@ -24,11 +24,13 @@ class _MemberTaskScreenState extends State<MemberTaskScreen> {
     final snapshot = await _firestore
         .collection('tasks') // 할 일 정보가 저장된 Firestore 컬렉션
         .where('memberId', isEqualTo: widget.memberId) // 해당 회원의 할 일 필터링
-        .where('date', isEqualTo: DateTime.now().toIso8601String().split('T')[0]) // 당일 할 일만
+        .where('date',
+            isEqualTo:
+                DateTime.now().toIso8601String().split('T')[0]) // 당일 할 일만
         .get();
 
     setState(() {
-      tasks = snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+      tasks = snapshot.docs.map((doc) => doc.data()).toList();
     });
   }
 
@@ -46,7 +48,10 @@ class _MemberTaskScreenState extends State<MemberTaskScreen> {
   }
 
   Future<void> updateTask(String taskId, bool completed) async {
-    await _firestore.collection('tasks').doc(taskId).update({'completed': completed});
+    await _firestore
+        .collection('tasks')
+        .doc(taskId)
+        .update({'completed': completed});
     fetchTasks(); // 새로고침
   }
 
@@ -54,7 +59,7 @@ class _MemberTaskScreenState extends State<MemberTaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('할 일 목록'),
+        title: const Text('할 일 목록'),
         backgroundColor: Colors.black,
       ),
       body: Column(
@@ -79,7 +84,7 @@ class _MemberTaskScreenState extends State<MemberTaskScreen> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: '새로운 할 일',
                 border: OutlineInputBorder(),
               ),

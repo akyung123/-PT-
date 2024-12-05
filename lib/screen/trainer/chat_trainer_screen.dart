@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ChatTrainerScreen extends StatefulWidget {
+  const ChatTrainerScreen({Key? key}) : super(key: key);
+
   @override
   _ChatTrainerScreenState createState() => _ChatTrainerScreenState();
 }
@@ -13,11 +15,11 @@ class _ChatTrainerScreenState extends State<ChatTrainerScreen> {
     if (_messageController.text.isNotEmpty) {
       setState(() {
         _messages.add(ChatMessage(
-          text: _messageController.text, 
+          text: _messageController.text,
           isMe: true,
         ));
         _messages.add(ChatMessage(
-          text: '자동 응답: 메시지 받았습니다', 
+          text: '자동 응답: 메시지 받았습니다',
           isMe: false,
         ));
         _messageController.clear();
@@ -29,7 +31,7 @@ class _ChatTrainerScreenState extends State<ChatTrainerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('채팅'),
+        title: const Text('채팅'),
         backgroundColor: Colors.blue,
       ),
       backgroundColor: Colors.white,
@@ -58,9 +60,9 @@ class _ChatTrainerScreenState extends State<ChatTrainerScreen> {
                     ),
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 IconButton(
-                  icon: Icon(Icons.send, color: Colors.blue),
+                  icon: const Icon(Icons.send, color: Colors.blue),
                   onPressed: _sendMessage,
                 ),
               ],
@@ -76,22 +78,23 @@ class ChatMessage extends StatelessWidget {
   final String text;
   final bool isMe;
 
-  ChatMessage({required this.text, required this.isMe});
+  const ChatMessage({Key? key, required this.text, required this.isMe})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-        padding: EdgeInsets.all(10),
+        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: isMe ? Colors.blue[100] : Colors.grey[300],
           borderRadius: BorderRadius.circular(10),
         ),
         child: Text(
           text,
-          style: TextStyle(fontSize: 16),
+          style: const TextStyle(fontSize: 16),
         ),
       ),
     );

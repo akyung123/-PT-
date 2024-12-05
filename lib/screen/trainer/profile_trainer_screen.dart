@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
 class ProfileTrainerScreen extends StatelessWidget {
+  const ProfileTrainerScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('내 정보'),
+        title: const Text('내 정보'),
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -19,23 +21,26 @@ class ProfileTrainerScreen extends StatelessWidget {
         children: [
           // 사용자 기본 정보
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
             child: Row(
               children: [
                 CircleAvatar(
                   radius: 30,
                   backgroundColor: Colors.grey[300],
-                  child: Icon(Icons.person, size: 30, color: Colors.white),
+                  child:
+                      const Icon(Icons.person, size: 30, color: Colors.white),
                 ),
                 const SizedBox(width: 16),
-                Column(
+                const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       '홍길동',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     Text(
                       '여자',
                       style: TextStyle(fontSize: 16, color: Colors.grey),
@@ -79,16 +84,17 @@ class ProfileTrainerScreen extends StatelessWidget {
           children: [
             Text(
               label,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             Row(
               children: [
                 Text(
                   value,
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                  style: const TextStyle(fontSize: 16, color: Colors.grey),
                 ),
                 const SizedBox(width: 8),
-                Icon(Icons.arrow_forward_ios, size: 16, color: const Color.fromARGB(255, 8, 8, 8)),
+                const Icon(Icons.arrow_forward_ios,
+                    size: 16, color: Color.fromARGB(255, 8, 8, 8)),
               ],
             ),
           ],
