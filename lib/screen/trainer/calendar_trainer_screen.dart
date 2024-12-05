@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class Calendar extends StatelessWidget {
+class CalendarTrainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -9,17 +9,17 @@ class Calendar extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: CalendarScreen(),
+      home: CalendarTrainerScreen(),
     );
   }
 }
 
-class CalendarScreen extends StatefulWidget {
+class CalendarTrainerScreen extends StatefulWidget {
   @override
-  _CalendarScreenState createState() => _CalendarScreenState();
+  _CalendarTrainerScreenState createState() => _CalendarTrainerScreenState();
 }
 
-class _CalendarScreenState extends State<CalendarScreen> {
+class _CalendarTrainerScreenState extends State<CalendarTrainerScreen> {
   late DateTime _selectedDay;
   late DateTime _focusedDay;
 
