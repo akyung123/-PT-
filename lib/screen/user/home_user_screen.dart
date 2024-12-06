@@ -3,10 +3,6 @@ import 'package:health_mate/screen/user/profile_user_screen.dart';
 import 'calendar_user_screen.dart';
 import 'chat_user_screen.dart';
 import 'package:intl/intl.dart'; // 날짜 형식화를 위한 패키지
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
-import 'package:table_calendar/table_calendar.dart';
 import '../../services/exercise_routine_manager.dart';
 
 class HomeUserScreen extends StatefulWidget {
@@ -37,14 +33,6 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
     });
   }
 
-  void _onDateChanged(DateTime newDate) {
-    setState(() {
-      _selectedDate = newDate;
-      _exerciseRoutines =
-          ExerciseRoutineManager.getRoutinesForDate(_selectedDate);
-    });
-  }
-
   Future<void> _showAddRoutineDialog() async {
     String exerciseName = '';
     int weight = 0;
@@ -54,17 +42,24 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Add Exercise Routine'),
+        title: const Text(
+          'Add Exercise Routine',
+          style: TextStyle(color: Colors.black),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               onChanged: (value) => exerciseName = value,
-              decoration: InputDecoration(hintText: "Enter exercise name"),
+              decoration: const InputDecoration(
+                hintText: "Enter exercise name",
+                hintStyle: TextStyle(color: Colors.grey),
+                border: UnderlineInputBorder(),
+              ),
+              style: const TextStyle(color: Colors.black),
             ),
-            SizedBox(height: 16),
-            _buildNumberInputRow(
-                "Weight (kg)", weight, (value) => weight = value),
+            const SizedBox(height: 16),
+            _buildNumberInputRow("Weight (kg)", weight, (value) => weight = value),
             _buildNumberInputRow("Reps", reps, (value) => reps = value),
             _buildNumberInputRow("Sets", sets, (value) => sets = value),
           ],
@@ -72,7 +67,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'),
+            child: const Text('Cancel', style: TextStyle(color: Colors.black)),
           ),
           TextButton(
             onPressed: () {
@@ -86,7 +81,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
               }
               Navigator.pop(context);
             },
-            child: Text('Add'),
+            child: const Text('Add', style: TextStyle(color: Colors.black)),
           ),
         ],
       ),
@@ -101,25 +96,13 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label),
+        Text(label, style: const TextStyle(color: Colors.black)),
         Row(
           children: [
             IconButton(
-              icon: Icon(Icons.do_not_disturb_on),
+              icon: const Icon(Icons.remove, color: Colors.black),
               onPressed: () {
-                int newValue = (int.parse(controller.text) - 5)
-                    .clamp(0, double.infinity)
-                    .toInt();
-                controller.text = newValue.toString();
-                onChanged(newValue);
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.remove),
-              onPressed: () {
-                int newValue = (int.parse(controller.text) - 1)
-                    .clamp(0, double.infinity)
-                    .toInt();
+                int newValue = (int.parse(controller.text) - 1).clamp(0, double.infinity).toInt();
                 controller.text = newValue.toString();
                 onChanged(newValue);
               },
@@ -130,22 +113,19 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                 controller: controller,
                 keyboardType: TextInputType.number,
                 textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.black),
+                decoration: const InputDecoration(
+                  isDense: true,
+                  border: UnderlineInputBorder(),
+                ),
                 onChanged: (value) =>
                     onChanged(int.tryParse(value) ?? initialValue),
               ),
             ),
             IconButton(
-              icon: Icon(Icons.add),
+              icon: const Icon(Icons.add, color: Colors.black),
               onPressed: () {
                 int newValue = (int.parse(controller.text) + 1).toInt();
-                controller.text = newValue.toString();
-                onChanged(newValue);
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.add_circle),
-              onPressed: () {
-                int newValue = (int.parse(controller.text) + 5).toInt();
                 controller.text = newValue.toString();
                 onChanged(newValue);
               },
@@ -161,8 +141,10 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Home'),
-        backgroundColor: Colors.purple,
+        title: const Text('Home', style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: SafeArea(
         child: Padding(
@@ -193,7 +175,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                         Text(
                           '홍길동',
                           style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
+                              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
                         ),
                         Text(
                           '부산광역시 서구',
@@ -205,12 +187,11 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                 ),
               ),
 
-// 날짜 선택
+              // 날짜 선택
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: List.generate(7, (index) {
                   DateTime date = _selectedDate.add(Duration(days: index - 1));
-
                   bool isSelected = date.day == _selectedDate.day;
 
                   return GestureDetector(
@@ -218,24 +199,22 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                CalendarUserScreen(initialDate: date)),
+                          builder: (context) =>
+                              CalendarUserScreen(initialDate: date),
+                        ),
                       );
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color:
-                            isSelected ? Colors.purple[100] : Colors.grey[200],
+                        color: isSelected ? Colors.black : Colors.grey[200],
                         borderRadius: BorderRadius.circular(8),
                       ),
                       padding: const EdgeInsets.symmetric(
                           vertical: 8.0, horizontal: 12.0),
                       child: Text(
-                        isSelected
-                            ? 'Today, ${DateFormat('dd').format(date)}'
-                            : DateFormat('dd').format(date),
+                        DateFormat('dd').format(date),
                         style: TextStyle(
-                          color: isSelected ? Colors.purple : Colors.black,
+                          color: isSelected ? Colors.white : Colors.black,
                           fontSize: 14,
                           fontWeight:
                               isSelected ? FontWeight.bold : FontWeight.normal,
@@ -247,7 +226,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
               ),
               const SizedBox(height: 24),
 
-// Goal Preview
+              // Goal Preview
               const Text(
                 'Goal Preview',
                 style: TextStyle(
@@ -271,14 +250,14 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                         Text(
                           'In-Progress',
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                              fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
                         ),
                         Text(
                           '56%',
                           style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: Colors.purple),
+                              color: Colors.black),
                         ),
                       ],
                     ),
@@ -286,7 +265,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                     LinearProgressIndicator(
                       value: 0.56,
                       backgroundColor: Colors.grey[300],
-                      color: Colors.purple,
+                      color: Colors.black,
                       minHeight: 8,
                     ),
                     const SizedBox(height: 8),
@@ -299,7 +278,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
               ),
               const SizedBox(height: 24),
 
-// 운동 루틴 섹션
+              // 운동 루틴 섹션
               const Text(
                 '운동 루틴',
                 style: TextStyle(
@@ -307,22 +286,8 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
               ),
-
               const SizedBox(height: 16),
 
-// // 운동 루틴 목록
-//               Expanded(
-//                 child: ListView.builder(
-//                   itemCount: _exerciseRoutines.length,
-//                   itemBuilder: (context, index) {
-//                     final routine = _exerciseRoutines[index];
-
-//                     return _buildRoutineCard(
-//                         routine['exercise']!, routine['details']!);
-//                   },
-//                 ),
-//               ),
-// 운동 루틴 목록
               Expanded(
                 child: ListView.builder(
                   itemCount: _exerciseRoutines.length,
@@ -335,11 +300,13 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                           borderRadius: BorderRadius.circular(12)),
                       child: ListTile(
                         leading: const Icon(Icons.fitness_center,
-                            color: Colors.purple),
-                        title: Text(routine['exercise'] ?? ''),
-                        subtitle: Text(routine['details'] ?? ''),
+                            color: Colors.black),
+                        title: Text(routine['exercise'] ?? '',
+                            style: const TextStyle(color: Colors.black)),
+                        subtitle: Text(routine['details'] ?? '',
+                            style: const TextStyle(color: Colors.grey)),
                         trailing: IconButton(
-                          icon: Icon(Icons.close, color: Colors.black),
+                          icon: const Icon(Icons.close, color: Colors.black),
                           onPressed: () {
                             ExerciseRoutineManager.deleteRoutine(
                                 _selectedDate, index);
@@ -352,11 +319,10 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                 ),
               ),
 
-// 운동 루틴 추가 버튼
               FloatingActionButton(
                 onPressed: _showAddRoutineDialog,
-                backgroundColor: Colors.purple,
-                child: const Icon(Icons.add),
+                backgroundColor: Colors.black,
+                child: const Icon(Icons.add, color: Colors.white),
               ),
             ],
           ),
@@ -364,6 +330,8 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
       ),
     );
   }
+}
+
 
 // // 루틴 카드 구성 함수
 //   Widget _buildRoutineCard(String title, String subtitle) {
@@ -415,4 +383,4 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
 //       ),
 //     );
 //   }
-}
+
