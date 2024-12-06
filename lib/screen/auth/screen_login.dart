@@ -34,7 +34,6 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      // Firebase 인증
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
@@ -43,14 +42,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
       String userId = userCredential.user!.uid;
 
-      // Firestore에서 사용자 문서 가져오기
       DocumentSnapshot userDoc = await FirebaseFirestore.instance
           .collection('users')
           .doc(userId)
           .get();
 
       if (userDoc.exists) {
-        // Firestore 데이터에서 필드 읽기
         Map<String, dynamic>? userData =
             userDoc.data() as Map<String, dynamic>?;
         String? userType = userData?['userType'];
@@ -58,18 +55,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
         if (userType == 'personal') {
           if (trainerId == null || trainerId.isEmpty) {
-            // 트레이너 선택 화면으로 이동
             Navigator.pushReplacementNamed(
               context,
               '/select_trainer',
               arguments: userId,
             );
           } else {
-            // 일반 회원 홈 화면으로 이동
             Navigator.pushReplacementNamed(context, '/tab_user');
           }
         } else if (userType == 'trainer') {
-          // 트레이너 홈 화면으로 이동
           Navigator.pushReplacementNamed(context, '/tab_trainer');
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -102,9 +96,9 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Colors.white,
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Container(
-            width: 300, // 화면의 중앙에 고정된 넓이
+            width: 280,
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey.shade300),
@@ -112,47 +106,60 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // ID 입력
                 TextField(
                   controller: emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'ID',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    hintText: 'ID',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide(color: Colors.grey.shade300),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: const BorderSide(color: Colors.black),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
-                // Password 입력
                 TextField(
                   controller: passwordController,
                   obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    hintText: 'Password',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide(color: Colors.grey.shade300),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: const BorderSide(color: Colors.black),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
-                // 로그인 버튼
                 ElevatedButton(
                   onPressed: loginUser,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                     foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
                     minimumSize: const Size(double.infinity, 48),
                   ),
                   child: isLoading
                       ? const CircularProgressIndicator(color: Colors.white)
                       : const Text('로그인'),
                 ),
-                const SizedBox(height: 20),
-                // 회원가입, 비밀번호 찾기 버튼
+                const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(
-                            context, '/register'); // 회원가입 화면으로 이동
+                        Navigator.pushNamed(context, '/register');
                       },
                       child: const Text(
                         '회원가입',
@@ -161,8 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(
-                            context, '/forgot_password'); // 비밀번호 찾기 화면으로 이동
+                        Navigator.pushNamed(context, '/forgot_password');
                       },
                       child: const Text(
                         '비밀번호 찾기',

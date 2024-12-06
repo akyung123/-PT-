@@ -11,7 +11,10 @@ class ProfileUserScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('내 정보 ($memberId)'), // memberId를 제목에 표시
+        title: Text(
+          '내 정보 ($memberId)',
+          style: const TextStyle(color: Colors.black),
+        ), // memberId를 제목에 표시
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
@@ -21,6 +24,7 @@ class ProfileUserScreen extends StatelessWidget {
           },
         ),
       ),
+      backgroundColor: Colors.grey[100],
       body: Column(
         children: [
           // 사용자 기본 정보
@@ -41,8 +45,10 @@ class ProfileUserScreen extends StatelessWidget {
                   children: [
                     Text(
                       '홍길동', // 사용자 이름 (임시 값, Firestore 연동 필요)
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
                     ),
                     SizedBox(height: 4),
                     Text(
@@ -65,7 +71,10 @@ class ProfileUserScreen extends StatelessWidget {
               children: [
                 const Text(
                   '트레이너 ID',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
                 ),
                 Text(
                   trainerId ?? '미등록', // 트레이너 ID가 없으면 '미등록' 표시
@@ -108,7 +117,8 @@ class ProfileUserScreen extends StatelessWidget {
           children: [
             Text(
               label,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                  fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
             ),
             Row(
               children: [
@@ -118,7 +128,7 @@ class ProfileUserScreen extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 const Icon(Icons.arrow_forward_ios,
-                    size: 16, color: Color.fromARGB(255, 8, 8, 8)),
+                    size: 16, color: Colors.black),
               ],
             ),
           ],
