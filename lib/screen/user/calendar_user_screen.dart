@@ -48,17 +48,24 @@ class _CalendarUserScreenState extends State<CalendarUserScreen> {
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Add Exercise Routine'),
+        title: const Text(
+          'Add Exercise Routine',
+          style: TextStyle(color: Colors.black),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               onChanged: (value) => exerciseName = value,
-              decoration: InputDecoration(hintText: "Enter exercise name"),
+              decoration: const InputDecoration(
+                hintText: "Enter exercise name",
+                hintStyle: TextStyle(color: Colors.grey),
+                border: UnderlineInputBorder(),
+              ),
+              style: const TextStyle(color: Colors.black),
             ),
-            SizedBox(height: 16),
-            _buildNumberInputRow(
-                "Weight (kg)", weight, (value) => weight = value),
+            const SizedBox(height: 16),
+            _buildNumberInputRow("Weight (kg)", weight, (value) => weight = value),
             _buildNumberInputRow("Reps", reps, (value) => reps = value),
             _buildNumberInputRow("Sets", sets, (value) => sets = value),
           ],
@@ -66,7 +73,7 @@ class _CalendarUserScreenState extends State<CalendarUserScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'),
+            child: const Text('Cancel', style: TextStyle(color: Colors.black)),
           ),
           TextButton(
             onPressed: () {
@@ -77,7 +84,7 @@ class _CalendarUserScreenState extends State<CalendarUserScreen> {
               }
               Navigator.pop(context);
             },
-            child: Text('Add'),
+            child: const Text('Add', style: TextStyle(color: Colors.black)),
           ),
         ],
       ),
@@ -92,25 +99,13 @@ class _CalendarUserScreenState extends State<CalendarUserScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label),
+        Text(label, style: const TextStyle(color: Colors.black)),
         Row(
           children: [
             IconButton(
-              icon: Icon(Icons.do_not_disturb_on),
+              icon: const Icon(Icons.remove, color: Colors.black),
               onPressed: () {
-                int newValue = (int.parse(controller.text) - 5)
-                    .clamp(0, double.infinity)
-                    .toInt();
-                controller.text = newValue.toString();
-                onChanged(newValue);
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.remove),
-              onPressed: () {
-                int newValue = (int.parse(controller.text) - 1)
-                    .clamp(0, double.infinity)
-                    .toInt();
+                int newValue = (int.parse(controller.text) - 1).clamp(0, double.infinity).toInt();
                 controller.text = newValue.toString();
                 onChanged(newValue);
               },
@@ -121,22 +116,19 @@ class _CalendarUserScreenState extends State<CalendarUserScreen> {
                 controller: controller,
                 keyboardType: TextInputType.number,
                 textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.black),
+                decoration: const InputDecoration(
+                  isDense: true,
+                  border: UnderlineInputBorder(),
+                ),
                 onChanged: (value) =>
                     onChanged(int.tryParse(value) ?? initialValue),
               ),
             ),
             IconButton(
-              icon: Icon(Icons.add),
+              icon: const Icon(Icons.add, color: Colors.black),
               onPressed: () {
                 int newValue = (int.parse(controller.text) + 1).toInt();
-                controller.text = newValue.toString();
-                onChanged(newValue);
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.add_circle),
-              onPressed: () {
-                int newValue = (int.parse(controller.text) + 5).toInt();
                 controller.text = newValue.toString();
                 onChanged(newValue);
               },
@@ -154,12 +146,41 @@ class _CalendarUserScreenState extends State<CalendarUserScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Calendar User Screen'),
-        backgroundColor: Colors.purple,
+        title: const Text(
+          'Calendar',
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
+      backgroundColor: Colors.grey[100],
       body: Column(
         children: [
           TableCalendar(
+            calendarStyle: CalendarStyle(
+              selectedDecoration: BoxDecoration(
+                color: Colors.black,
+                shape: BoxShape.circle,
+              ),
+              todayDecoration: BoxDecoration(
+                color: Colors.grey[300],
+                shape: BoxShape.circle,
+              ),
+              outsideDaysVisible: false,
+              weekendTextStyle: const TextStyle(color: Colors.black),
+              defaultTextStyle: const TextStyle(color: Colors.black),
+            ),
+            daysOfWeekStyle: const DaysOfWeekStyle(
+              weekendStyle: TextStyle(color: Colors.grey),
+              weekdayStyle: TextStyle(color: Colors.black),
+            ),
+            headerStyle: const HeaderStyle(
+              formatButtonVisible: false,
+              titleTextStyle: TextStyle(color: Colors.black, fontSize: 16),
+              leftChevronIcon: Icon(Icons.chevron_left, color: Colors.black),
+              rightChevronIcon: Icon(Icons.chevron_right, color: Colors.black),
+            ),
             calendarFormat: CalendarFormat.month,
             firstDay: DateTime.utc(2020, 1, 1),
             lastDay: DateTime.utc(2030, 12, 31),
@@ -180,11 +201,17 @@ class _CalendarUserScreenState extends State<CalendarUserScreen> {
                       borderRadius: BorderRadius.circular(12)),
                   child: ListTile(
                     leading:
-                        const Icon(Icons.fitness_center, color: Colors.purple),
-                    title: Text(routine['exercise'] ?? ''),
-                    subtitle: Text(routine['details'] ?? ''),
+                        const Icon(Icons.fitness_center, color: Colors.black),
+                    title: Text(
+                      routine['exercise'] ?? '',
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                    subtitle: Text(
+                      routine['details'] ?? '',
+                      style: const TextStyle(color: Colors.grey),
+                    ),
                     trailing: IconButton(
-                      icon: Icon(Icons.close, color: Colors.black),
+                      icon: const Icon(Icons.close, color: Colors.black),
                       onPressed: () {
                         ExerciseRoutineManager.deleteRoutine(
                             _selectedDate, index);
@@ -200,8 +227,8 @@ class _CalendarUserScreenState extends State<CalendarUserScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _showAddRoutineDialog,
-        backgroundColor: Colors.purple,
-        child: const Icon(Icons.add),
+        backgroundColor: Colors.black,
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

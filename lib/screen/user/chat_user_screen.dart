@@ -36,10 +36,12 @@ class _ChatUserScreenState extends State<ChatUserScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('채팅 (${widget.memberId})'), // memberId 표시
-        backgroundColor: Colors.blue,
+        title: Text('PT Chat (${widget.memberId})', style: const TextStyle(color: Colors.black)),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[100],
       body: Column(
         children: [
           Expanded(
@@ -50,24 +52,38 @@ class _ChatUserScreenState extends State<ChatUserScreen> {
               },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          Container(
+            color: Colors.white,
+            padding: const EdgeInsets.all(10),
             child: Row(
               children: [
+                IconButton(
+                  icon: const Icon(Icons.add, color: Colors.black),
+                  onPressed: () {
+                    // 첨부 파일 버튼 클릭 이벤트 처리
+                  },
+                ),
                 Expanded(
                   child: TextField(
                     controller: _messageController,
                     decoration: InputDecoration(
-                      hintText: '메시지 입력',
+                      hintText: '메세지 입력',
+                      hintStyle: const TextStyle(color: Colors.grey),
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 16),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide.none,
                       ),
                     ),
+                    style: const TextStyle(color: Colors.black),
                   ),
                 ),
                 const SizedBox(width: 8),
                 IconButton(
-                  icon: const Icon(Icons.send, color: Colors.blue),
+                  icon: const Icon(Icons.send, color: Colors.black),
                   onPressed: _sendMessage,
                 ),
               ],
@@ -94,12 +110,15 @@ class ChatMessage extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: isMe ? Colors.blue[100] : Colors.grey[300],
+          color: isMe ? Colors.black : Colors.grey[300],
           borderRadius: BorderRadius.circular(10),
         ),
         child: Text(
           text,
-          style: const TextStyle(fontSize: 16),
+          style: TextStyle(
+            fontSize: 16,
+            color: isMe ? Colors.white : Colors.black,
+          ),
         ),
       ),
     );

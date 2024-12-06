@@ -36,23 +36,24 @@ class _TabsUserScreenState extends State<TabsUserScreen> {
     return Scaffold(
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        // currentIndex: _selectedIndex,
-        // onTap: (index) {
-        //   setState(() {
-        //     _selectedIndex = index;
-        //   });
-        // },
         backgroundColor: Colors.white,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        selectedItemColor: Colors.purple, // 선택된 항목의 색상
+        selectedItemColor: Colors.black, // 선택된 항목의 색상
         unselectedItemColor: Colors.grey, // 선택되지 않은 항목의 색상
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+        unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
+        type: BottomNavigationBarType.fixed, // 아이콘과 라벨 모두 표시
+        elevation: 0, // 그림자 제거
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today), label: '달력'),
-          BottomNavigationBarItem(icon: Icon(Icons.chat), label: '채팅'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: '내정보'),
+              icon: Icon(Icons.home_outlined), label: '홈'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_today_outlined), label: '달력'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.chat_bubble_outline), label: '채팅'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline), label: '내정보'),
         ],
       ),
     );
