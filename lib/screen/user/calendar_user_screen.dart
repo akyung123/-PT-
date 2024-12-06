@@ -48,24 +48,17 @@ class _CalendarUserScreenState extends State<CalendarUserScreen> {
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(
-          'Add Exercise Routine',
-          style: TextStyle(color: Colors.black),
-        ),
+        title: Text('Add Exercise Routine'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               onChanged: (value) => exerciseName = value,
-              decoration: const InputDecoration(
-                hintText: "Enter exercise name",
-                hintStyle: TextStyle(color: Colors.grey),
-                border: UnderlineInputBorder(),
-              ),
-              style: const TextStyle(color: Colors.black),
+              decoration: InputDecoration(hintText: "Enter exercise name"),
             ),
-            const SizedBox(height: 16),
-            _buildNumberInputRow("Weight (kg)", weight, (value) => weight = value),
+            SizedBox(height: 16),
+            _buildNumberInputRow(
+                "Weight (kg)", weight, (value) => weight = value),
             _buildNumberInputRow("Reps", reps, (value) => reps = value),
             _buildNumberInputRow("Sets", sets, (value) => sets = value),
           ],
@@ -73,7 +66,7 @@ class _CalendarUserScreenState extends State<CalendarUserScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel', style: TextStyle(color: Colors.black)),
+            child: Text('Cancel'),
           ),
           TextButton(
             onPressed: () {
@@ -84,7 +77,7 @@ class _CalendarUserScreenState extends State<CalendarUserScreen> {
               }
               Navigator.pop(context);
             },
-            child: const Text('Add', style: TextStyle(color: Colors.black)),
+            child: Text('Add'),
           ),
         ],
       ),
@@ -99,13 +92,25 @@ class _CalendarUserScreenState extends State<CalendarUserScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: const TextStyle(color: Colors.black)),
+        Text(label),
         Row(
           children: [
             IconButton(
-              icon: const Icon(Icons.remove, color: Colors.black),
+              icon: Icon(Icons.do_not_disturb_on),
               onPressed: () {
-                int newValue = (int.parse(controller.text) - 1).clamp(0, double.infinity).toInt();
+                int newValue = (int.parse(controller.text) - 5)
+                    .clamp(0, double.infinity)
+                    .toInt();
+                controller.text = newValue.toString();
+                onChanged(newValue);
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.remove),
+              onPressed: () {
+                int newValue = (int.parse(controller.text) - 1)
+                    .clamp(0, double.infinity)
+                    .toInt();
                 controller.text = newValue.toString();
                 onChanged(newValue);
               },
@@ -116,19 +121,22 @@ class _CalendarUserScreenState extends State<CalendarUserScreen> {
                 controller: controller,
                 keyboardType: TextInputType.number,
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.black),
-                decoration: const InputDecoration(
-                  isDense: true,
-                  border: UnderlineInputBorder(),
-                ),
                 onChanged: (value) =>
                     onChanged(int.tryParse(value) ?? initialValue),
               ),
             ),
             IconButton(
-              icon: const Icon(Icons.add, color: Colors.black),
+              icon: Icon(Icons.add),
               onPressed: () {
                 int newValue = (int.parse(controller.text) + 1).toInt();
+                controller.text = newValue.toString();
+                onChanged(newValue);
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.add_circle),
+              onPressed: () {
+                int newValue = (int.parse(controller.text) + 5).toInt();
                 controller.text = newValue.toString();
                 onChanged(newValue);
               },

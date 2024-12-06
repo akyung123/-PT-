@@ -3,6 +3,10 @@ import 'package:health_mate/screen/user/profile_user_screen.dart';
 import 'calendar_user_screen.dart';
 import 'chat_user_screen.dart';
 import 'package:intl/intl.dart'; // 날짜 형식화를 위한 패키지
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:table_calendar/table_calendar.dart';
 import '../../services/exercise_routine_manager.dart';
 
 class HomeUserScreen extends StatefulWidget {
@@ -33,6 +37,14 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
     });
   }
 
+  void _onDateChanged(DateTime newDate) {
+    setState(() {
+      _selectedDate = newDate;
+      _exerciseRoutines =
+          ExerciseRoutineManager.getRoutinesForDate(_selectedDate);
+    });
+  }
+
   Future<void> _showAddRoutineDialog() async {
     String exerciseName = '';
     int weight = 0;
@@ -42,10 +54,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(
-          'Add Exercise Routine',
-          style: TextStyle(color: Colors.black),
-        ),
+        title: Text('Add Exercise Routine'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -56,10 +65,10 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                 hintStyle: TextStyle(color: Colors.grey),
                 border: UnderlineInputBorder(),
               ),
-              style: const TextStyle(color: Colors.black),
             ),
-            const SizedBox(height: 16),
-            _buildNumberInputRow("Weight (kg)", weight, (value) => weight = value),
+            SizedBox(height: 16),
+            _buildNumberInputRow(
+                "Weight (kg)", weight, (value) => weight = value),
             _buildNumberInputRow("Reps", reps, (value) => reps = value),
             _buildNumberInputRow("Sets", sets, (value) => sets = value),
           ],
@@ -100,9 +109,21 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
         Row(
           children: [
             IconButton(
+              icon: const Icon(Icons.do_not_disturb_on, color: Colors.black),
+              onPressed: () {
+                int newValue = (int.parse(controller.text) - 5)
+                    .clamp(0, double.infinity)
+                    .toInt();
+                controller.text = newValue.toString();
+                onChanged(newValue);
+              },
+            ),
+            IconButton(
               icon: const Icon(Icons.remove, color: Colors.black),
               onPressed: () {
-                int newValue = (int.parse(controller.text) - 1).clamp(0, double.infinity).toInt();
+                int newValue = (int.parse(controller.text) - 1)
+                    .clamp(0, double.infinity)
+                    .toInt();
                 controller.text = newValue.toString();
                 onChanged(newValue);
               },
@@ -113,11 +134,6 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                 controller: controller,
                 keyboardType: TextInputType.number,
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.black),
-                decoration: const InputDecoration(
-                  isDense: true,
-                  border: UnderlineInputBorder(),
-                ),
                 onChanged: (value) =>
                     onChanged(int.tryParse(value) ?? initialValue),
               ),
@@ -126,6 +142,14 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
               icon: const Icon(Icons.add, color: Colors.black),
               onPressed: () {
                 int newValue = (int.parse(controller.text) + 1).toInt();
+                controller.text = newValue.toString();
+                onChanged(newValue);
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.add_circle, color: Colors.black),
+              onPressed: () {
+                int newValue = (int.parse(controller.text) + 5).toInt();
                 controller.text = newValue.toString();
                 onChanged(newValue);
               },
@@ -175,7 +199,9 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                         Text(
                           '홍길동',
                           style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
                         ),
                         Text(
                           '부산광역시 서구',
@@ -187,11 +213,12 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                 ),
               ),
 
-              // 날짜 선택
+// 날짜 선택
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: List.generate(7, (index) {
                   DateTime date = _selectedDate.add(Duration(days: index - 1));
+
                   bool isSelected = date.day == _selectedDate.day;
 
                   return GestureDetector(
@@ -199,9 +226,8 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              CalendarUserScreen(initialDate: date),
-                        ),
+                            builder: (context) =>
+                                CalendarUserScreen(initialDate: date)),
                       );
                     },
                     child: Container(
@@ -212,7 +238,9 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                       padding: const EdgeInsets.symmetric(
                           vertical: 8.0, horizontal: 12.0),
                       child: Text(
-                        DateFormat('dd').format(date),
+                        isSelected
+                            ? 'Today, ${DateFormat('dd').format(date)}'
+                            : DateFormat('dd').format(date),
                         style: TextStyle(
                           color: isSelected ? Colors.white : Colors.black,
                           fontSize: 14,
@@ -226,7 +254,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
               ),
               const SizedBox(height: 24),
 
-              // Goal Preview
+// Goal Preview
               const Text(
                 'Goal Preview',
                 style: TextStyle(
@@ -250,7 +278,9 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                         Text(
                           'In-Progress',
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
                         ),
                         Text(
                           '56%',
@@ -278,7 +308,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
               ),
               const SizedBox(height: 24),
 
-              // 운동 루틴 섹션
+// 운동 루틴 섹션
               const Text(
                 '운동 루틴',
                 style: TextStyle(
@@ -286,8 +316,10 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
               ),
+
               const SizedBox(height: 16),
 
+// 운동 루틴 목록
               Expanded(
                 child: ListView.builder(
                   itemCount: _exerciseRoutines.length,
@@ -306,7 +338,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                         subtitle: Text(routine['details'] ?? '',
                             style: const TextStyle(color: Colors.grey)),
                         trailing: IconButton(
-                          icon: const Icon(Icons.close, color: Colors.black),
+                          icon: Icon(Icons.close, color: Colors.black),
                           onPressed: () {
                             ExerciseRoutineManager.deleteRoutine(
                                 _selectedDate, index);
@@ -319,6 +351,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                 ),
               ),
 
+// 운동 루틴 추가 버튼
               FloatingActionButton(
                 onPressed: _showAddRoutineDialog,
                 backgroundColor: Colors.black,
@@ -331,55 +364,3 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
     );
   }
 }
-
-
-// // 루틴 카드 구성 함수
-//   Widget _buildRoutineCard(String title, String subtitle) {
-//     return Card(
-//       margin: const EdgeInsets.only(bottom: 16),
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.circular(12),
-//       ),
-//       child: Padding(
-//         padding: const EdgeInsets.all(16.0),
-//         child: Row(
-//           children: [
-//             Container(
-//               height: 60,
-//               width: 60,
-//               decoration: BoxDecoration(
-//                 color: Colors.grey[300],
-//                 borderRadius: BorderRadius.circular(8),
-//               ),
-//               child: const Icon(
-//                 Icons.fitness_center,
-//                 color: Colors.white,
-//               ),
-//             ),
-//             const SizedBox(
-//               width: 16,
-//             ),
-//             Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Text(
-//                   title,
-//                   style: const TextStyle(
-//                     fontSize: 16,
-//                     fontWeight: FontWeight.bold,
-//                   ),
-//                 ),
-//                 Text(
-//                   subtitle,
-//                   style: TextStyle(
-//                     fontSize: 14,
-//                     color: Colors.grey[600],
-//                   ),
-//                 ),
-//               ],
-//             )
-//           ],
-//         ),
-//       ),
-//     );
-//   }
